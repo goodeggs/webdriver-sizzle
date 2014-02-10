@@ -38,3 +38,10 @@ describe 'webdriver-sizzle', ->
           $('.does-not-match').getText()
           assertUncaught /not a WebElement/, done
 
+    describe 'all', ->
+      it 'returns all matching elements', (done) ->
+        $.all('p').then (elements) ->
+          assert.equal elements.length, 2
+          done()
+
+

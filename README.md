@@ -11,7 +11,12 @@ var selenium = require('selenium-webdriver'),
       .build()
     $ = sizzle(driver)
 
+// Find the first element with class btn and click it
+$('.btn').click()
 
-    $('.btn').click()
+// Count the paragraphs
+$.all('p').then(function (elements) {
+  console.log(elements.count);
+});
 
 ```
