@@ -33,7 +33,7 @@
     "selenium-webdriver": ">=2.39.0"
   },
   "scripts": {
-    "build": "coffee scripts/minify.coffee > lib/sizzle.min.js && coffee --bare --compile --output lib/ src/",
+    "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
     "pretest": "npm run-script build",
     "test": "mocha",
     "prepublish": "npm run-script build"
