@@ -1,0 +1,34 @@
+{
+  "name": "webdriver-sizzle",
+  "version": "0.0.0",
+  "description": "Locate a selenium-webdriver element by sizzle CSS selector",
+  "author": "Good Eggs <open-source@goodeggs.com>",
+  "contributors": [
+    "Adam Hull <adam@hmlad.com>"
+  ],
+  "main": "lib/webdriver_sizzle.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/goodeggs/webdriver-sizzle.git"
+  },
+  "keywords": [
+    "selenium",
+    "webdriver",
+    "sizzle",
+    "integration-tests"
+  ],
+  "homepage": "https://github.com/goodeggs/webdriver-sizzle",
+  "bugs": "https://github.com/goodeggs/webdriver-sizzle/issues",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "coffee-script": ">=1.7.x",
+    "mocha": "~1.x.x"
+  },
+  "scripts": {
+    "build": "coffee --bare --compile --output lib/ src/",
+    "pretest": "npm run-script build",
+    "test": "mocha",
+    "prepublish": "npm run-script build"
+  }
+}
