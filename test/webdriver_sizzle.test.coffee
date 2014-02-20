@@ -10,7 +10,7 @@ assertUncaught = (regex, done) ->
   listeners = process.listeners 'uncaughtException'
   process.removeAllListeners 'uncaughtException'
   process.once 'uncaughtException', (err) ->
-    assert regex.test err.message
+    assert regex.test err.message, "#{err.message} doesn't match #{regex}"
     listeners.forEach (listener) -> process.on 'uncaughtException', listener
     done()
 
@@ -34,9 +34,9 @@ describe 'webdriver-sizzle', ->
           done()
 
       describe 'that matches no elements', ->
-        it 'throws an error', (done) ->
+        it 'throws an error that includes the selector', (done) ->
           $('.does-not-match').getText()
-          assertUncaught /not a WebElement/, done
+          assertUncaught /does-not-match/, done
 
     describe 'all', ->
       it 'returns all matching elements', (done) ->
