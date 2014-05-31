@@ -1,6 +1,5 @@
 selenium = require 'selenium-webdriver'
 path = require 'path'
-uglify = require 'uglify-js'
 fs = require 'fs'
 
 SIZZLE = 'window["___$_Sizzle__"]'
