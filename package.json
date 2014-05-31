@@ -19,24 +19,24 @@
   ],
   "homepage": "https://github.com/goodeggs/webdriver-sizzle",
   "bugs": "https://github.com/goodeggs/webdriver-sizzle/issues",
-  "dependencies": {},
+  "dependencies": {
+    "sizzle": "^1.1.0"
+  },
   "devDependencies": {
     "coffee-script": ">=1.7.x",
     "mocha": "~1.x.x",
     "selenium-webdriver": "~2.39.0",
     "phantomjs": "~1.9.7-1",
-    "jsmin": "~1.0.1",
-    "sizzle": "~1.1.0",
-    "uglify-js": "~2.4.12"
+    "sizzle": "~1.1.0"
   },
   "peerDependencies": {
     "selenium-webdriver": ">=2.39.0"
   },
   "scripts": {
-    "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
-    "pretest": "npm run-script build",
+    "build": "coffee --bare --compile --output lib/ src/",
+    "pretest": "npm run build",
     "test": "mocha",
-    "prepublish": "npm run-script build"
+    "prepublish": "npm run build"
   },
   "license": "MIT"
 }
