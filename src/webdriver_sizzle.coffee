@@ -1,12 +1,19 @@
 path = require 'path'
 fs = require 'fs'
 
-# review, necessary?
-selenium = require 'selenium-webdriver'
-{Deferred} = selenium.promise
-WebElement = selenium.WebElement
+###
+@param driver - a built driver instance
+@param selenium - the selenium module.
+very important that these are using the same code/version,
+b/c of the library's global control flow.
+###
+module.exports = (driver, selenium = require('selenium-webdriver')) ->
 
-module.exports = (driver) ->
+  unless driver instanceof selenium.WebDriver
+    throw new Error "Driver passed to webdriver-sizzle must be a WebDriver instance."
+
+  {Deferred} = selenium.promise
+  {WebElement} = selenium
 
   checkSizzleExists = ->
     driver.executeScript(-> window.Sizzle?)
@@ -21,48 +28,39 @@ module.exports = (driver) ->
       """
 
 
-  # return a WebElement promise.
-  getElement = (selector)->
-    elementPromise = driver.findElement selenium.By.js \
-    (selector)->
-      (window.Sizzle(selector) || [])[0]
-    , selector
-
-    # REVIEW - copied from before
-    elementPromise.then null, (err) ->
-      throw new Error "Selector #{selector} matches nothing"
-
-    elementPromise
-
-
+  # return a WebElement (promise).
   one = (selector) ->
     d = new Deferred
 
-    # first check if browser has jQuery/Zepto or Sizzle already available.
     checkSizzleExists()
-
-    .then (sizzleExists)->
-      unless sizzleExists
-        return injectSizzle()
-
+    .then (sizzleExists)-> return injectSizzle() unless sizzleExists
     .then ->
-      elPromise = getElement(selector)
-      d.fulfill elPromise
+      elementPromise = driver.findElement selenium.By.js \
+      (selector)->
+        (window.Sizzle(selector)||[])[0]
+      , selector
 
-    # .then null, d.reject
+      d.fulfill elementPromise
+
+    .thenCatch (err) ->
+      # gets caught and passed to next rejection handler
+      throw new Error "Selector #{selector} matches nothing"
 
     return new WebElement driver, d.promise
 
 
-  # TODO
-  all = (selector) ->
-    sizzleCode = fs.readFileSync path.join __dirname, '../lib', 'sizzle.min.js'
-    driver.findElements selenium.By.js("""
-      var module = {exports: {}};
-      #{sizzleCode}
-      var Sizzle = module.exports;
-      return (Sizzle(#{JSON.stringify selector}) || []);
-    """)
+  # return a promise that resolves to an array of WebElements.
+  one.all = (selector) ->
+    checkSizzleExists()
+    .then (sizzleExists)-> injectSizzle() unless sizzleExists
+    .then ->
+      elementPromise = driver.findElements selenium.By.js \
+      (selector)->
+        (window.Sizzle(selector)||[])
+      , selector
 
-  one.all = all
+      # # REVIEW - is this the best way to control the error message?
+      # elementPromise.then null, (err) ->
+      #   throw new Error "Selector #{selector} matches nothing"
+
   one
