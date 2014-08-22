@@ -23,7 +23,7 @@
   "devDependencies": {
     "coffee-script": ">=1.7.x",
     "mocha": "~1.x.x",
-    "selenium-webdriver": "~2.39.0",
+    "selenium-webdriver": "~2.42.0",
     "phantomjs": "~1.9.7-1",
     "jsmin": "~1.0.1",
     "sizzle": "~1.1.0",
