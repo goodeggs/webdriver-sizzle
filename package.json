@@ -1,10 +1,11 @@
 {
   "name": "webdriver-sizzle",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Locate a selenium-webdriver element by sizzle CSS selector",
   "author": "Good Eggs <open-source@goodeggs.com>",
   "contributors": [
-    "Adam Hull <adam@hmlad.com>"
+    "Adam Hull <adam@hmlad.com>",
+    "Ben Buckman <ben@benbuckman.net>"
   ],
   "main": "lib/webdriver_sizzle.js",
   "repository": {
@@ -23,14 +24,13 @@
   "devDependencies": {
     "coffee-script": ">=1.7.x",
     "mocha": "~1.x.x",
-    "selenium-webdriver": "~2.42.0",
+    "selenium-webdriver": ">=2.42.0",
     "phantomjs": "~1.9.7-1",
-    "jsmin": "~1.0.1",
     "sizzle": "~1.1.0",
     "uglify-js": "~2.4.12"
   },
   "peerDependencies": {
-    "selenium-webdriver": ">=2.39.0"
+    "selenium-webdriver": ">=2.42.0"
   },
   "scripts": {
     "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
