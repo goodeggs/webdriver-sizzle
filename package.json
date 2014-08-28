@@ -1,6 +1,6 @@
 {
   "name": "webdriver-sizzle",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Locate a selenium-webdriver element by sizzle CSS selector",
   "author": "Good Eggs <open-source@goodeggs.com>",
   "contributors": [
