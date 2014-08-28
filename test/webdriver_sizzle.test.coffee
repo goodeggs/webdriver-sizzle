@@ -3,6 +3,7 @@ path = require 'path'
 webdriver = require 'selenium-webdriver'
 webdriverSizzle = require '..'
 
+{WebElement} = webdriver
 {Deferred} = webdriver.promise
 
 url = (page) ->
@@ -14,8 +15,8 @@ assertUncaught = (regex, done) ->
   listeners = process.listeners 'uncaughtException'
   process.removeAllListeners 'uncaughtException'
   process.once 'uncaughtException', (err) ->
-    assert regex.test err.message, "#{err.message} doesn't match #{regex}"
     listeners.forEach (listener) -> process.on 'uncaughtException', listener
+    assert regex.test err.message, "#{err.message} doesn't match #{regex}"
     done()
 
 
@@ -36,22 +37,35 @@ describe 'webdriver-sizzle', ->
 
     describe 'calling with a CSS selector', ->
       it 'returns the first matching webdriver element', (done) ->
+        $('.test-el').then (el) ->
+          assert (el instanceof WebElement), 'is a WebElement'
+          el.getText().then (text) ->
+            assert.equal text, "The following text is an excerpt from Finnegan's Wake by James Joyce"
+            done()
+
+      it 'can also be chained', (done) ->
         $('.test-el').getText().then (text) ->
           assert.equal text, "The following text is an excerpt from Finnegan's Wake by James Joyce"
           done()
 
       describe 'that matches no elements', ->
-        it 'throws an error that includes the selector', (done) ->
-          p = $('.does-not-match').getText()
+        it 'rejects with an error that includes the selector', (done) ->
+          $('.does-not-match')
+          .thenCatch (expectedErr) ->
+            assert /does-not-match/.test(expectedErr?.message)
+            done()
 
-          ## not sure why this doesn't work. rejection doesn't seem to trickle down.
-          # p.then -> done new Error "Did not get expected error"
-          # p.thenCatch (expectedErr) ->
-          #   console.log {expectedErr}
-          #   assert /does-not-match/.test(expectedErr?.message)
-          #   done()
+        # TODO? -- this doesn't work, b/c of the way it's implemented
+        # in selenium-webdriver. doesn't seem that critical to work around.
+        it.skip 'rejection is also passed down chain', (done) ->
+          $('.does-not-match').getText()
+          .thenCatch (expectedErr) ->
+            assert /does-not-match/.test(expectedErr?.message)
+            done()
 
-          # workaround
+        # (alternative to above)
+        it 'chained methods causes error to be thrown', (done) ->
+          $('.does-not-match').getText()
           assertUncaught /does-not-match/, done
 
     describe 'all', ->

@@ -18,49 +18,41 @@ module.exports = (driver, selenium = require('selenium-webdriver')) ->
   checkSizzleExists = ->
     driver.executeScript(-> window.Sizzle?)
 
-  injectSizzle = ->
-    sizzleCode = fs.readFileSync path.join __dirname, '../lib', 'sizzle.min.js'
-    driver.executeScript \
-      """
-        var module = {exports: {}};
-        #{sizzleCode}
-        window.Sizzle = module.exports;
-      """
+  injectSizzleIfMissing = (sizzleExists)->
+    if sizzleExists then return
+    else
+      sizzleCode = fs.readFileSync path.join __dirname, '../lib', 'sizzle.min.js'
+      driver.executeScript \
+        """
+          var module = {exports: {}};
+          #{sizzleCode}
+          window.Sizzle = module.exports;
+        """
 
-
-  # return a WebElement (promise).
   one = (selector) ->
-    d = new Deferred
+    finder = ->
+      checkSizzleExists().then(injectSizzleIfMissing)
+      .then ->
+        driver.findElement selenium.By.js \
+          (selector)->
+            (window.Sizzle(selector)||[])[0]  # one
+          , selector
+      .thenCatch (err)->
+        throw new Error "Selector #{selector} matches nothing"
 
-    checkSizzleExists()
-    .then (sizzleExists)-> return injectSizzle() unless sizzleExists
-    .then ->
-      elementPromise = driver.findElement selenium.By.js \
-      (selector)->
-        (window.Sizzle(selector)||[])[0]
-      , selector
+    driver.findElement(finder)
 
-      d.fulfill elementPromise
-
-    .thenCatch (err) ->
-      # gets caught and passed to next rejection handler
-      throw new Error "Selector #{selector} matches nothing"
-
-    return new WebElement driver, d.promise
-
-
-  # return a promise that resolves to an array of WebElements.
   one.all = (selector) ->
-    checkSizzleExists()
-    .then (sizzleExists)-> injectSizzle() unless sizzleExists
-    .then ->
-      elementPromise = driver.findElements selenium.By.js \
-      (selector)->
-        (window.Sizzle(selector)||[])
-      , selector
+    finder = ->
+      checkSizzleExists().then(injectSizzleIfMissing)
+      .then ->
+        driver.findElements selenium.By.js \
+          (selector)->
+            window.Sizzle(selector)||[]  # all
+          , selector
+      .thenCatch (err)->
+        throw new Error "Selector #{selector} matches nothing"
 
-      # # REVIEW - is this the best way to control the error message?
-      # elementPromise.then null, (err) ->
-      #   throw new Error "Selector #{selector} matches nothing"
+    driver.findElements(finder)
 
   one
