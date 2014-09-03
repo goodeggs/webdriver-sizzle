@@ -9,8 +9,8 @@ b/c of the library's global control flow.
 ###
 module.exports = (driver, selenium = require('selenium-webdriver')) ->
 
-  unless driver instanceof selenium.WebDriver
-    throw new Error "Driver passed to webdriver-sizzle must be a WebDriver instance."
+  unless driver.executeScript? and driver.findElement? and driver.findElements?
+    throw new Error "Driver passed to webdriver-sizzle must implement executeScript(), findElement() and findElements()."
 
   {Deferred} = selenium.promise
   {WebElement} = selenium
