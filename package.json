@@ -24,13 +24,13 @@
   "devDependencies": {
     "coffee-script": ">=1.7.x",
     "mocha": "~1.x.x",
-    "selenium-webdriver": ">=2.42.0",
+    "selenium-webdriver": "^3.0.0-beta-3",
     "phantomjs": "~1.9.7-1",
     "sizzle": "~1.1.0",
     "uglify-js": "~2.4.12"
   },
   "peerDependencies": {
-    "selenium-webdriver": ">=2.42.0"
+    "selenium-webdriver": "^3.0.0-beta-3"
   },
   "scripts": {
     "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
