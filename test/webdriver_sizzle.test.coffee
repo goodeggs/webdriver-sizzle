@@ -9,17 +9,6 @@ webdriverSizzle = require '..'
 url = (page) ->
   "file://#{path.join __dirname, page}"
 
-# hack to work around thenCatch not working below,
-# hijack mocha's uncaughtException handler.
-assertUncaught = (regex, done) ->
-  listeners = process.listeners 'uncaughtException'
-  process.removeAllListeners 'uncaughtException'
-  process.once 'uncaughtException', (err) ->
-    listeners.forEach (listener) -> process.on 'uncaughtException', listener
-    assert regex.test err.message, "#{err.message} doesn't match #{regex}"
-    done()
-
-
 describe 'webdriver-sizzle', ->
   $ = null
   driver = null
@@ -51,22 +40,15 @@ describe 'webdriver-sizzle', ->
       describe 'that matches no elements', ->
         it 'rejects with an error that includes the selector', (done) ->
           $('.does-not-match')
-          .thenCatch (expectedErr) ->
+          .catch (expectedErr) ->
             assert /does-not-match/.test(expectedErr?.message)
             done()
 
-        # TODO? -- this doesn't work, b/c of the way it's implemented
-        # in selenium-webdriver. doesn't seem that critical to work around.
-        it.skip 'rejection is also passed down chain', (done) ->
+        it 'rejection is also passed down chain', (done) ->
           $('.does-not-match').getText()
-          .thenCatch (expectedErr) ->
+          .catch (expectedErr) ->
             assert /does-not-match/.test(expectedErr?.message)
             done()
-
-        # (alternative to above)
-        it 'chained methods causes error to be thrown', (done) ->
-          $('.does-not-match').getText()
-          assertUncaught /does-not-match/, done
 
     describe 'all', ->
       it 'returns all matching elements', (done) ->
