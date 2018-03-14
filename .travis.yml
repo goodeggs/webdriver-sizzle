@@ -1,6 +1,8 @@
 language: node_js
 node_js:
-- '0.10'
+- '6'
+- '7'
+- '8'
 # Disable auto-publish until we figure out why
 # coffee is missing at prepublish time:
 # https://travis-ci.org/goodeggs/webdriver-sizzle#L328

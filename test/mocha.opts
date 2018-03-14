@@ -1,2 +1,2 @@
---compilers coffee:coffee-script/register
+--require coffee-script --compilers coffee:coffee-script/register
 --reporter spec
