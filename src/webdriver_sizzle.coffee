@@ -37,7 +37,7 @@ module.exports = (driver, selenium = require('selenium-webdriver')) ->
           (selector)->
             (window.Sizzle(selector)||[])[0]  # one
           , selector
-      .thenCatch (err)->
+      .catch (err)->
         throw new Error "Selector #{selector} matches nothing"
 
     driver.findElement(finder)
@@ -50,7 +50,7 @@ module.exports = (driver, selenium = require('selenium-webdriver')) ->
           (selector)->
             window.Sizzle(selector)||[]  # all
           , selector
-      .thenCatch (err)->
+      .catch (err)->
         throw new Error "Selector #{selector} matches nothing"
 
     driver.findElements(finder)
