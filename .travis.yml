@@ -1,15 +1,6 @@
 language: node_js
 node_js:
-- '0.10'
-# Disable auto-publish until we figure out why
-# coffee is missing at prepublish time:
-# https://travis-ci.org/goodeggs/webdriver-sizzle#L328
-#
-# deploy:
-#   provider: npm
-#   email: open-source@goodeggs.com
-#   api_key:
-#     secure: DE2XklNtoSdgjvjupzNOM89wX/jVtrLiEJB+kKhw4nJr3NmT18uvFz3FdV2zFbdkuO9o8DiYlcKhgUJpSKZGj1HbZeKdBkIesb36JF7rAMEhbN/4kxA9fd49ldsVcSlZQ6vRLLU4IqH704gkczj4f6rYLjGJaYitHOGCyzOUMBI=
-#   on:
-#     tags: true
-#     repo: goodeggs/webdriver-sizzle
+  - 8.9.4
+
+addons:
+  chrome: stable

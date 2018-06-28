@@ -9,7 +9,7 @@ webdriverSizzle = require '..'
 url = (page) ->
   "file://#{path.join __dirname, page}"
 
-# hack to work around thenCatch not working below,
+# hack to work around then not working below,
 # hijack mocha's uncaughtException handler.
 assertUncaught = (regex, done) ->
   listeners = process.listeners 'uncaughtException'
@@ -25,9 +25,14 @@ describe 'webdriver-sizzle', ->
   driver = null
 
   before ->
+    chromeCapabilities = webdriver.Capabilities.chrome()
+    chromeCapabilities.set('chromeOptions', {args: ['--headless']})
+
     driver = new webdriver.Builder()
-      .withCapabilities(webdriver.Capabilities.phantomjs())
+      .forBrowser('chrome')
+      .withCapabilities(chromeCapabilities)
       .build()
+
     @timeout 0 # this may take a while in CI
 
   describe 'once driving a webdriver Builder', ->
@@ -51,7 +56,7 @@ describe 'webdriver-sizzle', ->
       describe 'that matches no elements', ->
         it 'rejects with an error that includes the selector', (done) ->
           $('.does-not-match')
-          .thenCatch (expectedErr) ->
+          .catch (expectedErr) ->
             assert /does-not-match/.test(expectedErr?.message)
             done()
 
@@ -59,7 +64,7 @@ describe 'webdriver-sizzle', ->
         # in selenium-webdriver. doesn't seem that critical to work around.
         it.skip 'rejection is also passed down chain', (done) ->
           $('.does-not-match').getText()
-          .thenCatch (expectedErr) ->
+          .then (expectedErr) ->
             assert /does-not-match/.test(expectedErr?.message)
             done()
 
