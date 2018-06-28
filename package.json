@@ -28,7 +28,6 @@
     "chromedriver": "^2.40.0",
     "coffee-script": ">=1.7.x",
     "mocha": "~1.x.x",
-    "phantomjs": "~1.9.7-1",
     "selenium-webdriver": "^3.6.0",
     "sizzle": "~1.1.0",
     "uglify-js": "~2.4.12"
