@@ -3,40 +3,36 @@
   "version": "0.2.2",
   "description": "Locate a selenium-webdriver element by sizzle CSS selector",
   "author": "Good Eggs <open-source@goodeggs.com>",
-  "contributors": [
-    "Adam Hull <adam@hmlad.com>",
-    "Ben Buckman <ben@benbuckman.net>"
-  ],
-  "main": "lib/webdriver_sizzle.js",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/goodeggs/webdriver-sizzle.git"
   },
+  "homepage": "https://github.com/goodeggs/webdriver-sizzle",
+  "bugs": "https://github.com/goodeggs/webdriver-sizzle/issues",
   "keywords": [
     "selenium",
     "webdriver",
     "sizzle",
     "integration-tests"
   ],
-  "homepage": "https://github.com/goodeggs/webdriver-sizzle",
-  "bugs": "https://github.com/goodeggs/webdriver-sizzle/issues",
+  "main": "lib/webdriver_sizzle.js",
+  "scripts": {
+    "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
+    "pretest": "yarn build",
+    "test": "mocha",
+    "prepublishOnly": "yarn build"
+  },
   "dependencies": {},
   "devDependencies": {
+    "chromedriver": "^2.40.0",
     "coffee-script": ">=1.7.x",
     "mocha": "~1.x.x",
-    "selenium-webdriver": ">=2.42.0",
-    "phantomjs": "~1.9.7-1",
+    "selenium-webdriver": "^3.6.0",
     "sizzle": "~1.1.0",
     "uglify-js": "~2.4.12"
   },
   "peerDependencies": {
-    "selenium-webdriver": ">=2.42.0"
-  },
-  "scripts": {
-    "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
-    "pretest": "npm run-script build",
-    "test": "mocha",
-    "prepublish": "npm run-script build"
-  },
-  "license": "MIT"
+    "selenium-webdriver": "^3.0.0"
+  }
 }
