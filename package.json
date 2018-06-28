@@ -21,7 +21,7 @@
     "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
     "pretest": "yarn build",
     "test": "mocha",
-    "prepublish": "yarn build"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {},
   "devDependencies": {
