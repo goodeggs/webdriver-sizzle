@@ -4,3 +4,7 @@ node_js:
 
 addons:
   chrome: stable
+
+install: yarn install
+
+script: yarn test

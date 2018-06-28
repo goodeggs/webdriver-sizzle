@@ -35,9 +35,9 @@
   },
   "scripts": {
     "build": "coffee --bare --compile --output lib/ src/ && coffee scripts/minify.coffee > lib/sizzle.min.js",
-    "pretest": "npm run-script build",
+    "pretest": "yarn build",
     "test": "mocha",
-    "prepublish": "npm run-script build"
+    "prepublish": "yarn build"
   },
   "license": "MIT"
 }
