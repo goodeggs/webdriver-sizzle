@@ -39,7 +39,6 @@ module.exports = (driver, selenium = require('selenium-webdriver')) ->
           (selector)->
             (window.Sizzle(selector)||[])[0]  # one
           , selector
-      .catch(onError)
 
     driver.findElement(finder)
 
