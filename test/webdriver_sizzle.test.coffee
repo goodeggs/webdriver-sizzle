@@ -1,6 +1,7 @@
 assert = require 'assert'
 path = require 'path'
 webdriver = require 'selenium-webdriver'
+
 webdriverSizzle = require '..'
 
 {WebElement} = webdriver
@@ -56,9 +57,13 @@ describe 'webdriver-sizzle', ->
       describe 'that matches no elements', ->
         it 'rejects with an error that includes the selector', (done) ->
           $('.does-not-match')
-          .catch (expectedErr) ->
-            assert /does-not-match/.test(expectedErr?.message)
-            done()
+          .then(
+            () ->
+              done(new Error('expected promise to reject'))
+            (expectedErr) ->
+              assert /does-not-match/.test(expectedErr?.message)
+              done()
+          )
 
         # TODO? -- this doesn't work, b/c of the way it's implemented
         # in selenium-webdriver. doesn't seem that critical to work around.

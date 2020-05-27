@@ -30,28 +30,29 @@ module.exports = (driver, selenium = require('selenium-webdriver')) ->
         """
 
   one = (selector) ->
+    onError = (err) -> throw new Error "Selector #{selector} matches nothing"
     finder = ->
-      checkSizzleExists().then(injectSizzleIfMissing)
+      # webdriver promises may not be native Promises, so can't use `.catch()`
+      checkSizzleExists().then(injectSizzleIfMissing, onError)
       .then ->
         driver.findElement selenium.By.js \
           (selector)->
             (window.Sizzle(selector)||[])[0]  # one
           , selector
-      .catch (err)->
-        throw new Error "Selector #{selector} matches nothing"
+      .catch(onError)
 
     driver.findElement(finder)
 
   one.all = (selector) ->
+    onError = (err) -> throw new Error "Selector #{selector} matches nothing"
     finder = ->
-      checkSizzleExists().then(injectSizzleIfMissing)
+      # webdriver promises may not be native Promises, so can't use `.catch()`
+      checkSizzleExists().then(injectSizzleIfMissing, onError)
       .then ->
         driver.findElements selenium.By.js \
           (selector)->
             window.Sizzle(selector)||[]  # all
           , selector
-      .catch (err)->
-        throw new Error "Selector #{selector} matches nothing"
 
     driver.findElements(finder)
 
